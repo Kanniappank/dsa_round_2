@@ -63,12 +63,25 @@ public class Recursion {
 
     // }
 
-    private static int fibonacciNumber(int num,int sum){
+    private static int fibonacciNumber(int num){
+       if(num<=1){
+        return num;
+       }
+       return fibonacciNumber(num-1)+fibonacciNumber(num-2);
+    }
+
+    private static int sumOfDigits(int num){
         if(num==0){
-            return sum;
+            return 0;
         }
-        sum*=num;
-        return fibonacciNumber(num-1, sum);
+        return (num%10)+sumOfDigits(num/10);
+    }
+
+    private static int sumOfDigitsTillitBecomesSingleDigit(int num){
+        if(num<10){
+            return num;
+        }
+        return sumOfDigitsTillitBecomesSingleDigit(sumOfDigits(num));
     }
     public static void main(String[] args) {
         // char[] s = { 'K', 'a', 'n', 'n', 'i', 'a', 'p', 'p', 'a', 'n' };
@@ -80,11 +93,13 @@ public class Recursion {
         // int n = 12;
         // System.out.println("does " + n + " prime: " + isPrime(n, 2));
 
-        int[] n = { 1, 4, 5, 7, 8 };
+        // int[] n = { 1, 4, 5, 7, 8 };
         // System.out.println(Arrays.toString(reverseArray(n, 0, n.length - 1)));
         // System.out.println("is array sorted: "+isArraySorted(n, 0));
 
-        System.out.println("Fibonacci of 5 is: "+fibonacciNumber(5, 1));
+        // System.out.println("Fibonacci of 5 is: "+fibonacciNumber(5));
+
+        System.out.println("sum of 529 "+sumOfDigitsTillitBecomesSingleDigit(529));
 
     }
 }
