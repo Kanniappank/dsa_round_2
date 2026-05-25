@@ -439,38 +439,38 @@ public class FundamentalArrays {
         return result;
     }
 
-    private static int[] arrangeElements(int[] nums) {4
-        //Brute force
+    private static int[] arrangeElements(int[] nums) {
+        // Brute force
         int n = nums.length;
         // List<Integer> pos = new ArrayList<>();
         // List<Integer> neg = new ArrayList<>();
         // for (int i = 0; i < n; i++) {
-        //     if (nums[i] < 0) {
-        //         neg.add(nums[i]);
-        //     } else {
-        //         pos.add(nums[i]);
-        //     }
+        // if (nums[i] < 0) {
+        // neg.add(nums[i]);
+        // } else {
+        // pos.add(nums[i]);
+        // }
         // }
         // for (int i = 0; i < n/2; i++) {
-        //     nums[2 * i] = pos.get(i);
-        //     nums[2 * i + 1] = neg.get(i);
+        // nums[2 * i] = pos.get(i);
+        // nums[2 * i + 1] = neg.get(i);
         // }
         // return nums;
 
-        // optimal 
-        
+        // optimal
+
         int[] ans = new int[n];
-        int posIndex=0;
-        int negIndex=1;
-        for(int i=0;i<n;i++){
-            if(nums[i]>0){
-                ans[posIndex]=nums[i];
-                posIndex+=2;
-            }
-            else
-                ans[negIndex]=nums[i];
-                negIndex+=2;
+        int posIndex = 0;
+        int negIndex = 1;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0) {
+                ans[posIndex] = nums[i];
+                posIndex += 2;
+            } else
+                ans[negIndex] = nums[i];
+            negIndex += 2;
         }
+        return ans;
     }
 
     private static List<Integer> printSpiralMatrix(int[][] matrix) {
@@ -478,9 +478,9 @@ public class FundamentalArrays {
         int rows = matrix.length;
         int columns = matrix[0].length;
         int top = 0;
-        int bottom = rows-1;
+        int bottom = rows - 1;
         int left = 0;
-        int right = columns-1;
+        int right = columns - 1;
 
         while (top <= bottom && left <= right) {
             // right
@@ -498,7 +498,7 @@ public class FundamentalArrays {
                 }
                 bottom--;
             }
-            if (left <= right) { 
+            if (left <= right) {
                 for (int l = bottom; l >= top; l--) {
                     ans.add(matrix[l][left]);
                 }
@@ -506,6 +506,36 @@ public class FundamentalArrays {
             }
         }
         return ans;
+    }
+
+    private static int ncr(int n, int r) {
+        int res = 1;
+        for (int i = 0; i < r; i++) {
+            res *= (n - i);
+            res /= i + 1;
+        }
+        return res;
+    }
+
+    private static List<Integer> printNthRowPascalTriangle(int n) {
+        int ans = 1;
+        List<Integer> res = new ArrayList<>();
+        res.add(ans);
+        for (int i = 1; i < n; i++) {
+            ans *= (n - i);
+            ans /= i;
+            res.add(ans);
+        }
+        return res;
+    }
+
+    private static List<List<Integer>> pascalTriangleOfNrows(int n){
+        List<List<Integer>> finalList = new ArrayList<>();
+        for(int i=1;i<n;i++){
+            List<Integer> tempList = printNthRowPascalTriangle(i);
+            finalList.add(tempList);
+        }
+        return finalList;
     }
 
     public static void main(String[] args) {
@@ -527,14 +557,18 @@ public class FundamentalArrays {
         // Arrays.toString(leadersOfarray(nums)));
 
         // int[] nums = { 2, 4, 5, -1, -3, -4 };
-        // System.out.println("Rearrangement of nums is: " + Arrays.toString(arrangeElements(nums)));
+        // System.out.println("Rearrangement of nums is: " +
+        // Arrays.toString(arrangeElements(nums)));
 
-         int[][] mat = {
-            {1, 2, 3, 4},
-            {5, 6, 7, 8},
-            {9, 10, 11, 12},
-            {13, 14, 15, 16}
-        };
-        System.out.println("spiral of matrix "+printSpiralMatrix(mat));
+        // int[][] mat = {
+        // { 1, 2, 3, 4 },
+        // { 5, 6, 7, 8 },
+        // { 9, 10, 11, 12 },
+        // { 13, 14, 15, 16 }
+        // };
+        // System.out.println("spiral of matrix " + printSpiralMatrix(mat));
+        // System.out.println("4C2 is " + ncr(5, 3));
+        // printNthRowPascalTriangle(4);
+        System.out.println("pascal triangle of the 6 rows is "+pascalTriangleOfNrows(6));
     }
 }
