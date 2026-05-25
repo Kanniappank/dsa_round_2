@@ -422,6 +422,92 @@ public class FundamentalArrays {
         return -1;
     }
 
+    private static int[] leadersOfarray(int[] nums) {
+        List<Integer> ans = new ArrayList<>();
+        int n = nums.length;
+        int min = Integer.MIN_VALUE;
+        for (int i = n - 1; i >= 0; i--) {
+            if (nums[i] > min) {
+                ans.add(nums[i]);
+                min = nums[i];
+            }
+        }
+        int[] result = new int[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            result[i] = ans.get(i);
+        }
+        return result;
+    }
+
+    private static int[] arrangeElements(int[] nums) {4
+        //Brute force
+        int n = nums.length;
+        // List<Integer> pos = new ArrayList<>();
+        // List<Integer> neg = new ArrayList<>();
+        // for (int i = 0; i < n; i++) {
+        //     if (nums[i] < 0) {
+        //         neg.add(nums[i]);
+        //     } else {
+        //         pos.add(nums[i]);
+        //     }
+        // }
+        // for (int i = 0; i < n/2; i++) {
+        //     nums[2 * i] = pos.get(i);
+        //     nums[2 * i + 1] = neg.get(i);
+        // }
+        // return nums;
+
+        // optimal 
+        
+        int[] ans = new int[n];
+        int posIndex=0;
+        int negIndex=1;
+        for(int i=0;i<n;i++){
+            if(nums[i]>0){
+                ans[posIndex]=nums[i];
+                posIndex+=2;
+            }
+            else
+                ans[negIndex]=nums[i];
+                negIndex+=2;
+        }
+    }
+
+    private static List<Integer> printSpiralMatrix(int[][] matrix) {
+        List<Integer> ans = new ArrayList<>();
+        int rows = matrix.length;
+        int columns = matrix[0].length;
+        int top = 0;
+        int bottom = rows-1;
+        int left = 0;
+        int right = columns-1;
+
+        while (top <= bottom && left <= right) {
+            // right
+            for (int i = left; i <= right; i++) {
+                ans.add(matrix[top][i]);
+            }
+            top++;
+            for (int j = top; j <= bottom; j++) {
+                ans.add(matrix[j][right]);
+            }
+            right--;
+            if (top <= bottom) {
+                for (int k = right; k >= left; k--) {
+                    ans.add(matrix[bottom][k]);
+                }
+                bottom--;
+            }
+            if (left <= right) { 
+                for (int l = bottom; l >= top; l--) {
+                    ans.add(matrix[l][left]);
+                }
+                left++;
+            }
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
         // int[] arr = { 0, 1, 2, 4, 5, 6 };
         // System.out.println(Arrays.toString(moveZerosToEnd(arr)));
@@ -432,7 +518,23 @@ public class FundamentalArrays {
         // System.out.println("Intersection array :" +
         // Arrays.toString(intersectionOfTwoArrays(nums1, nums2)));
 
-        int[] nums = { 7, 0, 0, 1, 7, 7, 2, 7, 7 };
-        System.out.println("Majority occuring element " + majorityElement(nums));
+        // int[] nums = { 7, 0, 0, 1, 7, 7, 2, 7, 7 };
+        // System.out.println("Majority occuring element " + majorityElement(nums));
+
+        // int[] nums = { 1, 2, 5, 3, 1, 2 };
+        // System.out.println(
+        // "Leader of the array " + Arrays.toString(nums) + " is :" +
+        // Arrays.toString(leadersOfarray(nums)));
+
+        // int[] nums = { 2, 4, 5, -1, -3, -4 };
+        // System.out.println("Rearrangement of nums is: " + Arrays.toString(arrangeElements(nums)));
+
+         int[][] mat = {
+            {1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {9, 10, 11, 12},
+            {13, 14, 15, 16}
+        };
+        System.out.println("spiral of matrix "+printSpiralMatrix(mat));
     }
 }
