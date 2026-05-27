@@ -529,13 +529,36 @@ public class FundamentalArrays {
         return res;
     }
 
-    private static List<List<Integer>> pascalTriangleOfNrows(int n){
+    private static List<List<Integer>> pascalTriangleOfNrows(int n) {
         List<List<Integer>> finalList = new ArrayList<>();
-        for(int i=1;i<n;i++){
+        for (int i = 1; i < n; i++) {
             List<Integer> tempList = printNthRowPascalTriangle(i);
             finalList.add(tempList);
         }
         return finalList;
+    }
+
+    private static int[][] rotateMatrix90degree(int[][] mat) {
+        // brute force
+        // int n = mat.length;
+        // int[][] ans = new int[n][n];
+        // for (int i = 0; i < mat.length; i++) {
+        // for (int j = 0; j < mat.length; j++) {
+        // ans[j][(n - 1) - i] = mat[i][j];
+        // }
+        // }
+        // return ans;
+
+        // optimal
+        int n = mat.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                int temp = mat[i][j];
+                mat[i][j] = mat[j][i];
+                mat[j][i] = temp;
+            }
+        }
+        return mat;
     }
 
     public static void main(String[] args) {
@@ -569,6 +592,14 @@ public class FundamentalArrays {
         // System.out.println("spiral of matrix " + printSpiralMatrix(mat));
         // System.out.println("4C2 is " + ncr(5, 3));
         // printNthRowPascalTriangle(4);
-        System.out.println("pascal triangle of the 6 rows is "+pascalTriangleOfNrows(6));
+        // System.out.println("pascal triangle of the 6 rows is
+        // "+pascalTriangleOfNrows(6));
+        int[][] mat = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+        // System.out.println("Rotated Matrix :" +
+        // Arrays.toString(rotateMatrix90degree(mat)));
+        int[][] ans = rotateMatrix90degree(mat);
+        for (int i = 0; i < ans.length; i++) {
+            System.out.println(Arrays.toString(ans[i]));
+        }
     }
 }
