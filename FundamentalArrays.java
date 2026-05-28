@@ -551,12 +551,16 @@ public class FundamentalArrays {
 
         // optimal
         int n = mat.length;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < i; j++) {
+        for(int i=0;i<n-1;i++){
+            for(int j=i+1;j<n;j++){
                 int temp = mat[i][j];
-                mat[i][j] = mat[j][i];
-                mat[j][i] = temp;
+                mat[i][j]=mat[j][i];
+                mat[j][i]=temp;
             }
+        }
+
+        for(int i=0;i<n;i++){
+            reverseArray(mat[i],null,null);
         }
         return mat;
     }
