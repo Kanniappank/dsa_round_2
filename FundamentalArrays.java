@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -538,6 +541,78 @@ public class FundamentalArrays {
         return finalList;
     }
 
+    private static int[] twoSum(int[] arr, int target) {
+        int[] ans = new int[2];
+        int n = arr.length;
+        // Brute force
+        /*
+         * Use a nested loop pick one element at a time and compare with the other
+         * elements
+         * if it matches the target the current index and the comparing index
+         */
+
+        // for (int i = 0; i < n; i++) {
+        // for (int j = i + 1; j < n; j++) {
+        // if (arr[i] + arr[j] == target) {
+        // ans[0]=i;
+        // ans[1]=j;
+        // }
+        // }
+        // }
+
+        // Better solution
+        /*
+         * Better solution is using a hash map
+         * with the current index subtract the current element with the target if the
+         * diffrence number
+         * is available return the current index and the available numbers index stored
+         * in the hash map
+         */
+        Map<Integer, Integer> hash = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int balance = target - arr[i];
+            if (hash.containsKey(balance)) {
+                ans[0] = hash.get(balance);
+                ans[1] = i;
+            }
+            hash.put(arr[i], i);
+        }
+        return ans;
+
+        // optimal approach
+        /*
+         * there are 2 varity of asking this question varity 1 is we have to tell
+         * wheather we have
+         * the two number that add up to give the target
+         * the second varity is we need to return the two numbers indexes for the second
+         * varity the better
+         * is the optimal approach
+         * for the 1st varity we have a two pointer approach sort the given array and
+         * use to pointer at the
+         * start and end add the 2 elements if the sum is grater than the target decreas
+         * the right pointer
+         * if the sum is smaller than the target the increase the left pointer if it
+         * matches the target return true
+         */
+
+        // int left = 0;
+        // int right = n;
+        // Arrays.sort(arr);
+        // while (left < right) {
+        // if (arr[left] + arr[right] > target) {
+        // right--;
+        // }
+        // else if(arr[left]+arr[right]<target){
+        // left++;
+        // }
+        // else{
+        // return true;
+        // }
+        // }
+        // return false;
+
+    }
+
     private static int[][] rotateMatrix90degree(int[][] mat) {
         // brute force
         // int n = mat.length;
@@ -551,42 +626,62 @@ public class FundamentalArrays {
 
         // optimal
         int n = mat.length;
-        for(int i=0;i<n-1;i++){
-            for(int j=i+1;j<n;j++){
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
                 int temp = mat[i][j];
-                mat[i][j]=mat[j][i];
-                mat[j][i]=temp;
+                mat[i][j] = mat[j][i];
+                mat[j][i] = temp;
             }
         }
 
-        for(int i=0;i<n;i++){
-            reverseArray(mat[i],null,null);
+        for (int i = 0; i < n; i++) {
+            reverseArray(mat[i], null, null);
         }
         return mat;
+    }
+
+    private static List<List<Integer>> triplesSumZero(int[] arr) {
+
+        // Brute force is to use the 3 nested loops to find the
+        List<List<Integer>> ans = new ArrayList<>();
+        Set<List<Integer>> st = new HashSet<>();
+        int n = arr.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j + 1; k < n; k++) {
+                    int sum = arr[i] + arr[j] + arr[k];
+                    if (sum == 0) {
+                        List<Integer> temp = new ArrayList<>();
+                        st.add(Arrays.asList(arr[i], arr[j], arr[k]));
+                        Collections.sort(temp);
+                        st.add(temp);
+                    }
+                }
+            }
+        }
+        for (List<Integer> item : st) {
+            ans.add(item);
+        }
+        return ans;
     }
 
     public static void main(String[] args) {
         // int[] arr = { 0, 1, 2, 4, 5, 6 };
         // System.out.println(Arrays.toString(moveZerosToEnd(arr)));
         // System.out.println("Missing elements " + missingNumber(arr));
-
         // int[] nums1 = { 1, 2, 2, 3, 5 };
         // int[] nums2 = { 1, 2, 7 };
         // System.out.println("Intersection array :" +
         // Arrays.toString(intersectionOfTwoArrays(nums1, nums2)));
-
         // int[] nums = { 7, 0, 0, 1, 7, 7, 2, 7, 7 };
         // System.out.println("Majority occuring element " + majorityElement(nums));
-
         // int[] nums = { 1, 2, 5, 3, 1, 2 };
         // System.out.println(
         // "Leader of the array " + Arrays.toString(nums) + " is :" +
         // Arrays.toString(leadersOfarray(nums)));
-
         // int[] nums = { 2, 4, 5, -1, -3, -4 };
         // System.out.println("Rearrangement of nums is: " +
         // Arrays.toString(arrangeElements(nums)));
-
         // int[][] mat = {
         // { 1, 2, 3, 4 },
         // { 5, 6, 7, 8 },
@@ -598,12 +693,18 @@ public class FundamentalArrays {
         // printNthRowPascalTriangle(4);
         // System.out.println("pascal triangle of the 6 rows is
         // "+pascalTriangleOfNrows(6));
-        int[][] mat = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+        // int[][] mat = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
         // System.out.println("Rotated Matrix :" +
         // Arrays.toString(rotateMatrix90degree(mat)));
-        int[][] ans = rotateMatrix90degree(mat);
-        for (int i = 0; i < ans.length; i++) {
-            System.out.println(Arrays.toString(ans[i]));
-        }
+        // int[][] ans = rotateMatrix90degree(mat);
+        // for (int i = 0; i < ans.length; i++) {
+        // System.out.println(Arrays.toString(ans[i]));
+        // }
+        // int[] arr = { 1, 6, 2, 10, 3 };
+        // int target = 7;
+        // System.out.println("Indexes are : " + Arrays.toString(twoSum(arr, target)));
+
+        int[] nums = { 2, -2, 0, 3, -3, 5 };
+        System.out.println(triplesSumZero(nums));
     }
 }
