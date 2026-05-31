@@ -643,26 +643,230 @@ public class FundamentalArrays {
     private static List<List<Integer>> triplesSumZero(int[] arr) {
 
         // Brute force is to use the 3 nested loops to find the
-        List<List<Integer>> ans = new ArrayList<>();
-        Set<List<Integer>> st = new HashSet<>();
+        // List<List<Integer>> ans = new ArrayList<>();
+        // Set<List<Integer>> st = new HashSet<>();
+        // int n = arr.length;
+        // for (int i = 0; i < n; i++) {
+        // for (int j = i + 1; j < n; j++) {
+        // for (int k = j + 1; k < n; k++) {
+        // int sum = arr[i] + arr[j] + arr[k];
+        // if (sum == 0) {
+        // List<Integer> temp = new ArrayList<>();
+        // st.add(Arrays.asList(arr[i], arr[j], arr[k]));
+        // Collections.sort(temp);
+        // st.add(temp);
+        // }
+        // }
+        // }
+        // }
+        // for (List<Integer> item : st) {
+        // ans.add(item);
+        // }
+        // return ans;
+
+        // Better solution
+        /*
+         * Reducing the looping to a 2 loop instead of a 3 loops
+         * with the formula x+y+z=0 x=-(z+y)
+         */
+
+        // List<List<Integer>> ans = new ArrayList<>();
+        // Set<List<Integer>> resultSet = new HashSet<>();
+        // int n = arr.length;
+        // for (int i = 0; i < n; i++) {
+        // Set<Integer> comparingSet = new HashSet<>();
+        // for (int j = i + 1; j < n; j++) {
+        // int balance = -(arr[i] + arr[j]);
+        // if (comparingSet.contains(balance)) {
+        // List<Integer> temp = Arrays.asList(arr[i], arr[j], balance);
+        // Collections.sort(temp);
+        // resultSet.add(temp);
+        // }
+        // comparingSet.add(arr[j]);
+        // }
+        // }
+        // for (List<Integer> item : resultSet) {
+        // ans.add(item);
+        // }
+        // return ans;
+
+        // Optimal approach
+        /*
+         * to use 2 pointer approach solve this problem
+         */
         int n = arr.length;
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(arr);
         for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                for (int k = j + 1; k < n; k++) {
-                    int sum = arr[i] + arr[j] + arr[k];
-                    if (sum == 0) {
-                        List<Integer> temp = new ArrayList<>();
-                        st.add(Arrays.asList(arr[i], arr[j], arr[k]));
-                        Collections.sort(temp);
-                        st.add(temp);
-                    }
+            if (i > 0 && arr[i] == arr[i - 1])
+                continue;
+            int j = i + 1;
+            int k = n - 1;
+            while (j < k) {
+                int sum = arr[i] + arr[j] + arr[k];
+                if (sum > 0) {
+                    k--;
+                } else if (sum < 0) {
+                    j++;
+                } else {
+                    List<Integer> temp = Arrays.asList(arr[i], arr[j], arr[k]);
+                    ans.add(temp);
+                    j++;
+                    k--;
+                    while (j < k && arr[j] == arr[j - 1])
+                        j++;
+                    while (j < k && arr[k] == arr[k + 1])
+                        k--;
                 }
             }
         }
-        for (List<Integer> item : st) {
-            ans.add(item);
-        }
         return ans;
+
+    }
+
+    private static int[] sort012(int[] nums) {
+
+        // brute force
+        /* is to use merge sort */
+
+        // Better solution
+        /*
+         * have 3 variables count0,count1,count2 iterate through the array and increace
+         * the coun
+         * based on the number you have encountered and run seperate loop for 3 diffrent
+         * variable
+         * append the actual array with the corresponding number
+         */
+
+        int count0 = 0;
+        int count1 = 0;
+        int count2 = 0;
+        int n = nums.length;
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) {
+                count0++;
+            } else if (nums[i] == 1) {
+                count1++;
+            } else {
+                count2++;
+            }
+        }
+        for (int i = 0; i <= count0; i++) {
+            nums[i] = 0;
+        }
+        for (int i = count0; i < count1 + count1; i++) {
+            nums[i] = 1;
+        }
+        for (int i = count0 + count1; i < nums.length; i++) {
+            nums[i] = 2;
+        }
+        return nums;
+        // Optimal solution Dutch National flag algorithm
+        // int low = 0;
+        // int mid = 0;
+        // int high = nums.length - 1;
+        // while (mid < high) {
+        // if (nums[mid] == 0) {
+        // swap(nums, mid, low);
+        // low++;
+        // mid++;
+        // } else if (nums[mid] == 1) {
+        // mid++;
+        // } else {
+        // swap(nums, mid, high);
+        // high--;
+        // }
+        // }
+        // return nums;
+    }
+
+    private static int maxSubarraySum(int[] nums) {
+
+        /*
+         * Brute force
+         * check all the sub array and return the maximum sub array
+         */
+        // int n = nums.length;
+        // int max = Integer.MIN_VALUE;
+        // for (int i = 0; i < n; i++) {
+        // for (int j = i; j < n; j++) {
+        // int sum = 0;
+        // for (int k = i; k <= j; k++) {
+        // sum += nums[k];
+        // }
+        // max = Math.max(max, sum);
+        // }
+        // }
+        // return max;
+
+        /*
+         * Better solution
+         * better solution is eliminating the inner most loop and add sum in the second
+         * array
+         * so that you will find the max of all the sums
+         */
+
+        // Optimal solution
+        int n = nums.length;
+        int sum = 0;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            sum += nums[i];
+            max = Math.max(max, sum);
+            if (sum < 0) {
+                sum = 0;
+            }
+        }
+        return max > 0 ? max : 0;
+
+        /*
+         * If they want you to print the sub array
+         * int n = nums.length;
+         * int sum = 0;
+         * int max = Integer.MIN_VALUE;
+         * int startIndex = -1;
+         * int endIndex = -1;
+         * int start=-1
+         * for (int i = 0; i < n; i++) {
+         * if(sum==0)start=i;
+         * sum += nums[i];
+         * if(sum>max){
+         * max=sum;
+         * startindex = start ;
+         * endindex = i;
+         * }
+         * if (sum < 0) {
+         * sum = 0;
+         * }
+         * }
+         * return max > 0 ? max : 0;
+         */
+    }
+
+    private static int[] nextPermutation(int[] nums) {
+        int n = nums.length;
+        int index = -1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (nums[i] < nums[i + 1]) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            reverseArray(nums, null, null);
+            return nums;
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (nums[index] < nums[i]) {
+                swap(nums, index, i);
+                break;
+            }
+        }
+        reverseArray(nums, index+1, n-1);
+
+        return nums;
     }
 
     public static void main(String[] args) {
@@ -704,7 +908,13 @@ public class FundamentalArrays {
         // int target = 7;
         // System.out.println("Indexes are : " + Arrays.toString(twoSum(arr, target)));
 
-        int[] nums = { 2, -2, 0, 3, -3, 5 };
-        System.out.println(triplesSumZero(nums));
+        // int[] nums = { 2, -2, 0, 3, -3, 5 };
+        // { -3,-2, 0, 2, 3, 5 }
+        // System.out.println(triplesSumZero(nums));
+        // int[] nums = { 1, 0, 2, 1, 0 };
+        // System.out.println("sorted arrays : " + Arrays.toString(sort012(nums)));
+
+        int[] nums = {3,2,1};
+        System.out.println("Next Permutation is " + Arrays.toString(nextPermutation(nums)));
     }
 }
