@@ -864,9 +864,290 @@ public class FundamentalArrays {
                 break;
             }
         }
-        reverseArray(nums, index+1, n-1);
+        reverseArray(nums, index + 1, n - 1);
 
         return nums;
+    }
+
+    private static List<Integer> majorityElements2(int[] nums) {
+
+        // Brute force method
+        int n = nums.length;
+        List<Integer> ans = new ArrayList<>();
+        // for (int i = 0; i < n; i++) {
+        // int count = 0;
+        // if (ans.size() == 0 || ans.get(0) != nums[i]) {
+        // for (int j = 0; j < n; j++) {
+        // if (nums[j] == nums[i]) {
+        // count++;
+        // }
+        // }
+        // if (count > (n / 3)) {
+        // ans.add(nums[i]);
+        // }
+        // }
+        // if (ans.size() == 2) {
+        // break;
+        // }
+        // }
+        // return ans;
+
+        /*
+         * Better method
+         * use hashing to find the number of times the element occurs and
+         * based on the count add the element to the answer array
+         */
+
+        // Map<Integer, Integer> hash = new HashMap<>();
+        // int minimum = n / 3 + 1;
+        // for (int i = 0; i < n; i++) {
+        // hash.put(nums[i], hash.getOrDefault(nums[i], 0) + 1);
+        // if (hash.get(nums[i]) == minimum) {
+        // ans.add(nums[i]);
+        // }
+        // if (ans.size() == 2) {
+        // break;
+        // }
+        // }
+        // return ans;
+
+        /*
+         * Optimal approach
+         * this optimal approach is derived from the moores voting algoritm we are going
+         * to repliate
+         * it for 2 elements and make a slight change
+         */
+
+        int el1 = Integer.MIN_VALUE;
+        int el2 = Integer.MIN_VALUE;
+        int count1 = 0;
+        int count2 = 0;
+        for (int i = 0; i < n; i++) {
+            if (count1 == 0 && el2 != nums[i]) { // additional set to check wheater the el1 is not equal to el2
+                count1 = 1;
+                el1 = nums[i];
+            } else if (count2 == 0 && el1 != nums[i]) {// additional set to check wheater the el1 is not equal to el2
+                count2 = 1;
+                el2 = nums[i];
+            } else if (el1 == nums[i]) {
+                count1++;
+            } else if (el2 == nums[i]) {
+                count2++;
+            } else {
+                count1--;
+                count2--;
+            }
+        }
+        count1 = 0;
+        count2 = 0;
+        int minimum = n / 3 + 1;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == el1) {
+                count1++;
+            } else if (nums[i] == el2) {
+                count2++;
+            }
+        }
+        if (count1 >= minimum) {
+            ans.add(el1);
+        }
+        if (count2 >= minimum) {
+            ans.add(el2);
+        }
+        return ans;
+    }
+
+    private static int[] findRepeatingMissingNumber(int[] nums) {
+
+        // Brute force
+        int n = nums.length;
+        int repeating = -1;
+        int missing = -1;
+        // for (int i = 1; i <= n; i++) {
+        // int count = 0;
+        // for (int j = 0; j < n; j++) {
+        // if (nums[j] == i) {
+        // count++;
+        // }
+        // }
+        // if (count == 2) {
+        // repeating = i;
+        // }
+        // if (count == 0) {
+        // missing = i;
+        // }
+        // if (repeating != -1 && missing != -1) {
+        // break;
+        // }
+        // }
+
+        /*
+         * Better solution
+         * Hashing hash the numbers in the array based on their frequency and iterate
+         * through the array to
+         * find the missing number and the repeating numbers
+         */
+
+        // int[] hash = new int[n+1];
+
+        // for (int i = 0; i < n; i++) {
+        // hash[nums[i]]++;
+        // }
+        // for (int i = 1; i < hash.length; i++) {
+        // if (hash[i] == 2) {
+        // repeating = i;
+        // }
+        // if (hash[i] == 0) {
+        // missing = i;
+        // }
+        // }
+
+        /*
+         * Optimal approach
+         * is to create 2 equation and solve the problem
+         */
+
+        int s = 0;
+        int sn = 0;
+        int s2 = 0;
+        int sn2 = 0;
+        sn = (n * (n + 1)) / 2;
+        sn2 = (n * (n + 1) * ((2 * n) + 1)) / 6;
+        for (int i = 0; i < n; i++) {
+            s += nums[i];
+            s2 += nums[i] * nums[i];
+        }
+        int val1 = s - sn; // x-y
+        int val2 = s2 - sn2;
+        val2 = val2 / val1; // (x+y)(x-y)
+        /*
+         * Calculate X and Y from X + Y and X - Y
+         * X = ((X + Y) + (X - Y)) / 2
+         * Y = X - (X - Y)
+         */
+        repeating = (val1 + val2) / 2;
+        missing = repeating - val1;
+
+        return new int[] { repeating, missing };
+
+    }
+
+    // private static int merge(int[] arr, int low,int mid,int high){
+    // int temp = new int[high+low-1];
+
+    // }
+
+    // private static int mergeSort(int[] arr, int low, int high) {
+    // int count = 0;
+    // if (low < high) {
+    // int mid = low + high / 2;
+    // count = mergeSort(arr, low, mid);
+    // count = mergeSort(arr, mid + 1, high);
+
+    // }
+    // return count;
+    // }
+
+    // private static int noofInversion(int[] nums) {
+    // int n = nums.length;
+    // return mergeSort(nums, 0, n - 1);
+    // }
+
+    private static int maxProductInSubarray(int[] nums) {
+
+        // optimal approach
+        int ans = Integer.MIN_VALUE;
+        int n = nums.length;
+        // int prefix = 1;
+        // int suffix = 1;
+        // for (int i = 0; i < n; i++) {
+        // if (prefix == 0)
+        // prefix = 1;
+        // if (suffix == 0)
+        // suffix = 1;
+        // prefix *= nums[i];
+        // suffix *= nums[n - i - 1];
+        // ans = Math.max(ans, Math.max(prefix, suffix));
+        // }
+
+        /*
+         * Brute force is to use nested loop to create the all the possible subarrays
+         * and return the max product
+         */
+
+        for (int i = 0; i < n; i++) {
+            int product = 1;
+            for (int j = i; j < n; j++) {
+                product *= nums[j];
+            }
+            ans = Math.max(ans, product);
+        }
+        return ans;
+
+    }
+
+    private static void mergeTwoArrays(int[] arr1, int[] arr2, int n, int m) {
+
+        // Brute force solution
+        /*
+         * time complexity O(n+m)+O(n+m) because iteration over 2 arrays to sort it in
+         * to the third array
+         * and iteration to the length of 2 arrays to arrange them in the first array
+         * and the 2nd array
+         * space complexity is O(n+m) additional 3rd array
+         */
+        // int left = 0;
+        // int right = 0;
+        // int index = 0;
+        // int[] arr3 = new int[n + m];
+        // while (left < n && right < m) {
+        // if (arr1[left] < arr2[right]) {
+        // arr3[index] = arr1[left];
+        // left++;
+        // index++;
+        // } else {
+        // arr3[index] = arr2[right];
+        // right++;
+        // index++;
+        // }
+        // }
+        // while (left < n) {
+        // arr3[index++] = arr1[left++];
+        // }
+        // while (right < m) {
+        // arr3[index++] = arr2[right++];
+        // }
+
+        // for (int i = 0; i < n + m; i++) {
+        // if (i < n) {
+        // arr1[i] = arr3[i];
+        // } else {
+        // arr2[i - n] = arr3[i];
+        // }
+        // }
+
+        /*
+         * Optimal approach 1
+         */
+
+        int left = n - 1;
+        int right = 0;
+        while (left >= 0 && right < m) {
+            if (arr1[left] > arr2[right]) {
+                int temp = arr1[left];
+                arr1[left] = arr2[right];
+                arr2[right] = temp;
+                left--;
+                right++;
+            }
+            else{
+                break;
+            }
+        }
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        System.out.println("first array " + Arrays.toString(arr1));
+        System.out.println("second array " + Arrays.toString(arr2));
     }
 
     public static void main(String[] args) {
@@ -907,14 +1188,21 @@ public class FundamentalArrays {
         // int[] arr = { 1, 6, 2, 10, 3 };
         // int target = 7;
         // System.out.println("Indexes are : " + Arrays.toString(twoSum(arr, target)));
-
         // int[] nums = { 2, -2, 0, 3, -3, 5 };
         // { -3,-2, 0, 2, 3, 5 }
         // System.out.println(triplesSumZero(nums));
         // int[] nums = { 1, 0, 2, 1, 0 };
         // System.out.println("sorted arrays : " + Arrays.toString(sort012(nums)));
-
-        int[] nums = {3,2,1};
-        System.out.println("Next Permutation is " + Arrays.toString(nextPermutation(nums)));
+        // int[] nums = { 3, 2, 1 };
+        // System.out.println("Next Permutation is " +
+        // Arrays.toString(nextPermutation(nums)));
+        // int[] nums = { 4, 5, 3, 7, 1, 2 };
+        // System.out.println("repeating and missing numbers " +
+        // Arrays.toString(findRepeatingMissingNumber(nums)));
+        // System.out.println("max product of the sub array " +
+        // maxProductInSubarray(nums));
+        int[] nums1 = { -5, -2, 4, 5 };
+        int[] nums2 = { -3, 1, 8 };
+        mergeTwoArrays(nums1, nums2, nums1.length, nums2.length);
     }
 }
